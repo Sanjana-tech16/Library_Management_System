@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS books (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    author TEXT NOT NULL,
+    isbn TEXT UNIQUE,
+    copies INTEGER NOT NULL DEFAULT 1,
+    available INTEGER NOT NULL DEFAULT 1
+);
+CREATE TABLE IF NOT EXISTS members (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE,
+    phone TEXT
+);
+CREATE TABLE IF NOT EXISTS issues (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    book_id INTEGER NOT NULL REFERENCES books(id),
+    member_id INTEGER NOT NULL REFERENCES members(id),
+    issue_date TEXT NOT NULL,
+    due_date TEXT NOT NULL,
+    return_date TEXT
+);
