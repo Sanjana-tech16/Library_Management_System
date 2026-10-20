@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ 'Edit' if member else 'Add' }} Member</h1>
+<div class="card">
+<form method="post">
+  <label>Name</label><input name="name" required value="{{ member.name if member else '' }}">
+  <label>Email</label><input type="email" name="email" value="{{ member.email if member and member.email else '' }}">
+  <label>Phone</label><input name="phone" value="{{ member.phone if member and member.phone else '' }}">
+  <p><button class="btn">Save</button> <a class="btn gray" href="{{ url_for('members') }}">Cancel</a></p>
+</form>
+</div>
+{% endblock %}
