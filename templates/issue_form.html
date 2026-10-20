@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Issue a Book</h1>
+<div class="card">
+<form method="post">
+  <label>Book</label>
+  <select name="book_id" required>
+    <option value="">-- select book --</option>
+    {% for b in books %}<option value="{{ b.id }}">{{ b.title }} ({{ b.available }} available)</option>{% endfor %}
+  </select>
+  <label>Member</label>
+  <select name="member_id" required>
+    <option value="">-- select member --</option>
+    {% for m in members %}<option value="{{ m.id }}">{{ m.name }}</option>{% endfor %}
+  </select>
+  <p><button class="btn">Issue</button> <a class="btn gray" href="{{ url_for('issues') }}">Cancel</a></p>
+</form>
+</div>
+{% endblock %}
