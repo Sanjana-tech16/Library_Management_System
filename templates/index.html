@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero">
+  <div>
+    <h1>Welcome to the Library 📚</h1>
+    <p>Manage books, members and loans from one place.</p>
+  </div>
+  <div class="actions">
+    <a class="btn light" href="{{ url_for('issue_book') }}">Issue a book</a>
+    <a class="btn light" href="{{ url_for('add_book') }}">+ Book</a>
+    <a class="btn light" href="{{ url_for('add_member') }}">+ Member</a>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><span class="icon">📖</span><div><b>{{ stats.titles }}</b><span>Book titles</span></div></div>
+  <div class="stat purple"><span class="icon">📚</span><div><b>{{ stats.books }}</b><span>Total copies</span></div></div>
+  <div class="stat green"><span class="icon">✅</span><div><b>{{ stats.available }}</b><span>Available now</span></div></div>
+  <div class="stat"><span class="icon">👥</span><div><b>{{ stats.members }}</b><span>Members</span></div></div>
+  <div class="stat orange"><span class="icon">📤</span><div><b>{{ stats.issued }}</b><span>Currently issued</span></div></div>
+  <div class="stat red"><span class="icon">⏰</span><div><b>{{ stats.overdue }}</b><span>Overdue</span></div></div>
+</div>
+
+{% if stats.titles == 0 %}
+<div class="card empty">
+  <h2>Your library is empty</h2>
+  <p>Add books and members yourself, or load some sample data to explore the system.</p>
+  <form method="post" action="{{ url_for('seed') }}" class="inline"><button class="btn">Load sample data</button></form>
+</div>
+{% else %}
+<div class="grid-2">
+  <div class="card">
+    <h2>⏰ Overdue books</h2>
+    <table>
+      <tr><th>Book</th><th>Member</th><th>Due</th></tr>
+      {% for i in overdue %}
+      <tr><td>{{ i.title }}</td><td>{{ i.name }}</td><td><span class="badge red">{{ i.due_date }}</span></td></tr>
+      {% else %}<tr><td colspan="3" class="empty">🎉 No overdue books</td></tr>{% endfor %}
+    </table>
+  </div>
+  <div class="card">
+    <h2>🔥 Most popular books</h2>
+    <table>
+      {% for p in popular %}
+      <tr><td><span class="rank">{{ loop.index }}</span>{{ p.title }}<span class="sub">{{ p.author }}</span></td>
+          <td><span class="badge blue">{{ p.n }} loan{{ 's' if p.n != 1 }}</span></td></tr>
+      {% else %}<tr><td class="empty">No loans yet</td></tr>{% endfor %}
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <h2>🕒 Recent activity</h2>
+  <table>
+    <tr><th>Book</th><th>Member</th><th>Issued</th><th>Status</th></tr>
+    {% for i in recent %}
+    <tr><td>{{ i.title }}</td><td>{{ i.name }}</td><td>{{ i.issue_date }}</td>
+      <td>{% if i.return_date %}<span class="badge green">Returned</span>{% else %}<span class="badge yellow">Issued</span>{% endif %}</td></tr>
+    {% else %}<tr><td colspan="4" class="empty">No activity yet</td></tr>{% endfor %}
+  </table>
+</div>
+{% endif %}
+{% endblock %}
